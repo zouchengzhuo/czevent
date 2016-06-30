@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+<script  src="require.js"></script>
+<script>
+    require.config({
+        paths: {
+            czEvent: '../czEvent'
+        }
+    });
+    require(["czEvent"], function(czEvent) {
+        function MyEmitter() {
+            //xxxx
+        }
+        czEvent(MyEmitter);
+        var myEmitter = new MyEmitter();
+        myEmitter.addEventListener("hehe",function(){
+            alert("hehe")
+        })
+        myEmitter.addEventListener("hehe",function(){
+            alert("haha")
+        })
+        myEmitter.once("hehe",function(){
+            alert("xixi")
+        })
+        myEmitter.trigger("hehe");
+        myEmitter.trigger("hehe");
+        myEmitter.removeEventListener("hehe");
+        myEmitter.trigger("hehe");
+    });
+</script>
+</body>
+</html>

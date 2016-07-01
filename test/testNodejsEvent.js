@@ -4,9 +4,6 @@
 var EventEmitter = require('events');
 var util = require('util');
 
-
-
-
 function MyEmitter() {
     EventEmitter.call(this);
 }

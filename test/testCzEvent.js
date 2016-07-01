@@ -10,6 +10,7 @@ function MyEmitter() {
 czEvent(MyEmitter);
 
 var myEmitter = new MyEmitter();
+var myEmitter2 = new MyEmitter();
 myEmitter.addEventListener("hehe",function(){
     console.log("hehe")
 })
@@ -23,3 +24,4 @@ myEmitter.trigger("hehe");
 myEmitter.trigger("hehe","hello","world");
 myEmitter.removeEventListener("hehe");
 myEmitter.trigger("hehe");
+myEmitter2.trigger("hehe");

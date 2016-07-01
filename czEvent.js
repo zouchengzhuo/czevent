@@ -10,13 +10,6 @@
     }
 }(typeof window !== "undefined" ? window : this,function(window,noGlobal){
     /**
-     * 一个用来记录事件类型和事件单元对象的全局Map，每一种事件只需要创建一个meta对象
-     * @type {{handlerId: number}}
-     */
-    var EventHandlerMap={
-        __handlerId:0//一个递增的事件id， 用来赋值给handler，防止同一handler被重复绑定到同一事件上
-    }
-    /**
      * 定义一个事件单元类
      * @param eventname
      * @constructor
@@ -26,12 +19,14 @@
         this.handlerMap={};
         this.handlerList=[];
     }
+
     /**
      * 绑定事件监听
      * @param type
      * @param handler
      */
     function addEventListener(eventname,handler){
+        var EventHandlerMap=this.getEventHandlerMap();
         var meta=EventHandlerMap[eventname];
         if(!meta){
             meta=EventHandlerMap[eventname]=new EventMeta(eventname);
@@ -48,6 +43,7 @@
             meta.handlerList.push(handler);
         }
     }
+
     /**
      * 绑定只执行一次的handler
      * @param type
@@ -55,14 +51,16 @@
      */
     function once(eventname,handler){
         handler.__once=true;
-        addEventListener(eventname,handler);
+        this.addEventListener(eventname,handler);
     }
+
     /**
      * 移除事件监听
      * @param type
      * @param handdler
      */
     function removeEventListener(eventname,handdler){
+        var EventHandlerMap=this.getEventHandlerMap();
         var meta=EventHandlerMap[eventname];
         if(!meta) return;
         //移除一个handler的绑定
@@ -78,12 +76,15 @@
         meta.handlerMap={};
         meta.handlerList.length=0;
     }
+
     /**
      * 触发事件
      * @param eventname
      */
     function trigger(){
+        var EventHandlerMap=this.getEventHandlerMap();
         var args=[];
+        var that=this;
         for(var i=0;i<arguments.length;i++){
             args.push(arguments[i]);
         }
@@ -100,14 +101,20 @@
         });
         //清除绑定为once的事件
         onceHandlerList.forEach(function(handler){
-            removeEventListener(eventname,handler);
+            that.removeEventListener(eventname,handler);
         });
+    }
+    function getEventHandlerMap(){
+        var EventHandlerMap=this.__EventHandlerMap;
+        if(EventHandlerMap) return EventHandlerMap;
+        return this.__EventHandlerMap={__handlerId:0};
     }
     var prototype={
         addEventListener:addEventListener,
         once:once,
         removeEventListener:removeEventListener,
-        trigger:trigger
+        trigger:trigger,
+        getEventHandlerMap:getEventHandlerMap
     }
     function czEvent(fn){
         if(typeof fn!=="function") return;

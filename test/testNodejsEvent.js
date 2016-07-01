@@ -16,5 +16,8 @@ myEmitter.on("hehe",function(){
 myEmitter.on("hehe",function(){
     console.log("haha")
 })
-myEmitter.emit("hehe");
-console.log(myEmitter.listeners("hehe"));
+//myEmitter.emit("hehe");
+//console.log(myEmitter.listeners("hehe"));
+
+var my2=new MyEmitter();
+my2.emit("hehe");

@@ -116,7 +116,15 @@
         trigger:trigger,
         getEventHandlerMap:getEventHandlerMap
     }
-    function czEvent(fn){
+    function czEvent(fn,asObj){
+        if(asObj){
+            for(var key in prototype){
+                Object.defineProperty(fn,key,{
+                    value:prototype[key]
+                })
+            }
+            return;
+        }
         if(typeof fn!=="function") return;
         fn.prototype=Object.create(prototype);
     }
